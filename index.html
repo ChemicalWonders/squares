@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Squares</title>
+	<link rel="stylesheet" type="text/css" href="assets/css/squares.css">
+	<script type="text/javascript" src="assets/js/libs/paper-full.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.9/howler.min.js"></script>
+	<script type="text/javascript" src="assets/js/keyData.js"></script>
+	<script type="text/paperscript" canvas="myCanvas">
+		var squares = [];
+		function onKeyDown(event) {
+			if(data[event.key]){
+
+				// Random Point first
+				var point = new Point(view.size.width, view.size.heght) * Point.random();
+
+				// Create a new square
+				var newSquare = new Path.RegularPolygon(point, 4, 400);
+				newSquare.fillColor = data[event.key].color;
+
+				// Play a sound
+				data[event.key].sound.play();
+
+				// Push a new square in the random point
+				squares.push(newSquare);
+			}	
+		}
+
+		function onFrame(event) {
+			for(var i = 0; i < squares.length; i++){
+				squares[i].fillColor.hue += 1;
+				squares[i].scale(.9);
+
+				if(squares[i].area < 1){
+					squares[i].remove();
+					squares[i].splice(i, 1);
+					--i;
+				}
+			}
+			
+		}
+</script>
+</head>
+<body>
+	<canvas id="myCanvas" resize></canvas>
+</body>
+</html>
